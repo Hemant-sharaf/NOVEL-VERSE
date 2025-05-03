@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Novel Nest</title>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <section class="nevbar">
+        <div class="nev">
+            <h3>NovelNest</h3>
+            <a href="#" class="home">Home</a>
+            <a href="ai.html" class="ai-genrate">ai-generate</a>
+            <a href="book.html" class="Book">Books</a>
+            <button id="sign-in-btn">Sign In</button>
+            <div id="user-dropdown" class="dropdown" style="display: none;">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown">
+                    <span id="user-initials"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><span class="dropdown-item-text" id="user-email"></span></li>
+                    <li><button class="dropdown-item text-danger" id="logout-btn">Logout</button></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="carousel">
+        <div id="carouselExampleRide" class="carousel slide" data-bs-ride="true">
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="2000">
+                    <img src="images/corousel1.png" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                    <img src="images/corousel2.png" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                    <img src="images/corousel3.png" class="d-block w-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </section>
+    <section class="lowerbox">
+      <div class="container mt-4" style="margin-top: 100px;">
+        <div class="custom-slider">
+            <div class="slider-wrapper" id="custom-slider">
+                <!-- Slide 1 -->
+                <div class="slider-item">
+                    <img src="images/image1.png" alt="Book 1" class="slider-image">
+                    <div class="slider-info">
+                        <h3 class="slider-title">Whispers of the Veil</h3>
+                        <p class="slider-description">
+                            Eleanor inherits a locket that lets her speak to spirits, but when the veil between worlds starts 
+                            <br>
+                            collapsing, she must uncover its true power to save both realms.
+                        </p>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="slider-item">
+                    <img src="images/image2.png" alt="Book 2" class="slider-image">
+                    <div class="slider-info">
+                        <h3 class="slider-title">The Crimson Moon Pact</h3>
+                        <p class="slider-description">
+                            Maya becomes the leader of a cursed werewolf clan and must break an ancient curse tied to the 
+                            <br>
+                            crimson moon before a dark force destroys them all.
+                        </p>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="slider-item">
+                    <img src="images/image3.png" alt="Book 3" class="slider-image">
+                    <div class="slider-info">
+                        <h3 class="slider-title">Ethereal Warden</h3>
+                        <p class="slider-description">
+                            After gaining powers as a guardian of realms, Alex must battle celestial and demonic forces to 
+                            <br>
+                            protect Earth from a universe-shattering artifact.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    
+    </section>
+    
+    <section>
+        <div class="container mt-4">
+            <div class="card-container">
+                <div class="card">
+                    <a href="pdfs/novel1.pdf" target="_blank">
+                        <img src="images/image4.png" alt="The Time Machine" class="card-image">
+                    </a>
+                    <a href="pdfs/novel1.pdf" target="_blank" class="card-title">The Time Machine</a>
+                    <p class="card-genre">Science Fiction</p>
+                </div>
+                <div class="card">
+                    <a href="pdfs/novel2.pdf" target="_blank">
+                        <img src="images/image5.png" alt="The Metamorphosis" class="card-image">
+                    </a>
+                    <a href="pdfs/novel2.pdf" target="_blank" class="card-title">The Metamorphosis</a>
+                    <p class="card-genre">Surrealism/Existential Fiction</p>
+                </div>
+                <div class="card">
+                    <a href="pdfs/novel3.pdf" target="_blank">
+                        <img src="images/image6.png" alt="The Three Perils of Man" class="card-image">
+                    </a>
+                    <a href="pdfs/novel3.pdf" target="_blank" class="card-title">The Three Perils of Man</a>
+                    <p class="card-genre">Adventure/Gothic Fiction</p>
+                </div>
+                <div class="card">
+                    <a href="pdfs/novel4.pdf" target="_blank">
+                        <img src="images/image7.png" alt="Northanger Abbey" class="card-image">
+                    </a>
+                    <a href="pdfs/novel4.pdf" target="_blank" class="card-title">Northanger Abbey</a>
+                    <p class="card-genre">Romance/Satire</p>
+                </div>
+                <div class="card">
+                    <a href="pdfs/novel5.pdf" target="_blank">
+                        <img src="images/image8.png" alt="High School DxD - Asia's Treasure" class="card-image">
+                    </a>
+                    <a href="pdfs/novel5.pdf" target="_blank" class="card-title">High School DxD - Asia's Treasure</a>
+                    <p class="card-genre">Fantasy/Action</p>
+                </div>
+                <div class="card">
+                    <a href="pdfs/novel6.pdf" target="_blank">
+                        <img src="images/image9.png" alt="Software Engineering" class="card-image">
+                    </a>
+                    <a href="pdfs/novel6.pdf" target="_blank" class="card-title">Software Engineering</a>
+                    <p class="card-genre">Educational/Technical</p>
+                </div>
+                <div class="card">
+                    <a href="pdfs/novel7.pdf" target="_blank">
+                        <img src="images/image10.png" alt="The Trial" class="card-image">
+                    </a>
+                    <a href="pdfs/novel7.pdf" target="_blank" class="card-title">The Trial</a>
+                    <p class="card-genre">Philosophical Fiction/Legal Drama</p>
+                </div>
+                <div class="card">
+                    <a href="pdfs/novel8.pdf" target="_blank">
+                        <img src="images/image11.png" alt="Brave New World" class="card-image">
+                    </a>
+                    <a href="pdfs/novel8.pdf" target="_blank" class="card-title">Brave New World</a>
+                    <p class="card-genre">Dystopian Science Fiction</p>
+                </div>
+                <div class="card">
+                    <a href="pdfs/novel9.pdf" target="_blank">
+                        <img src="images/image12.png" alt="Women in Love" class="card-image">
+                    </a>
+                    <a href="pdfs/novel9.pdf" target="_blank" class="card-title">Women in Love</a>
+                    <p class="card-genre">Literary Fiction/Romance</p>
+                </div>
+                <div class="card">
+                    <a href="pdfs/novel10.pdf" target="_blank">
+                        <img src="images/image13.png" alt="Solo Leveling" class="card-image">
+                    </a>
+                    <a href="pdfs/novel10.pdf" target="_blank" class="card-title">Solo Leveling</a>
+                    <p class="card-genre">Fantasy/Action</p>
+                </div>
+                <div class="card">
+                    <a href="pdfs/novel11.pdf" target="_blank">
+                        <img src="images/image14.png" alt="Chainsaw Man" class="card-image">
+                    </a>
+                    <a href="pdfs/novel11.pdf" target="_blank" class="card-title">Chainsaw Man</a>
+                    <p class="card-genre">Fantasy/Action</p>
+                </div>
+                <div class="card">
+                    <a href="pdfs/novel12.pdf" target="_blank">
+                        <img src="images/image15.png" alt="Chainsaw Man" class="card-image">
+                    </a>
+                    <a href="pdfs/novel12.pdf" target="_blank" class="card-title">Monster</a>
+                    <p class="card-genre">Fantasy/Action</p>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+    <div id="app"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+<!-- Your Firebase config -->
+<script type="module" src="firebase-config.js"></script>
+
+
+
+
+    <script src="index.js" type="module"></script>
+</body>
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3 class="footer-title">About Us</h3>
+            <p class="footer-text">
+                Welcome to our dark and thrilling world. We craft killer stories that keep you on edge while embracing the cold aesthetic of mystery and thrill.
+            </p>
+        </div>
+        <div class="footer-section">
+            <h3 class="footer-title">Quick Links</h3>
+            <ul class="footer-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Genres</a></li>
+                <li><a href="#">New Arrivals</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3 class="footer-title">Follow Us</h3>
+            <div class="footer-social">
+                <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 Novel Nest Bloody Cold Stories. All rights reserved. YUG BOTHRA DEVASISH MOGHE AND DAKSH TRIVEDI</p>
+    </div>
+</footer>
+</html>

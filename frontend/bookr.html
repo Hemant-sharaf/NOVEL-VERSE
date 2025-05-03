@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Recommender</title>
+    <style>
+        /* ---------- BODY & BACKGROUND ---------- */
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          margin: 0;
+          padding: 20px;
+          position: relative;
+          overflow-x: hidden;
+          background-color: #171717;
+          color: #e5e5e5;
+          /* Improved layered CSS textures: darker gradient + subtle noise */
+          background-image:
+            linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%),
+            url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+          background-blend-mode: overlay;
+          animation: bgShift 60s linear infinite;
+          min-height: 100vh;
+        }
+        
+        @keyframes bgShift {
+          0% { background-position: 0 0, 0 0; }
+          100% { background-position: 1000px 1000px, 0 0; }
+        }
+        
+        /* ---------- FLOATING PAGES WITH SMOOTHER PHYSICS ---------- */
+        .page {
+          position: absolute;
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.08);
+          box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+          pointer-events: none;
+          backdrop-filter: blur(1px);
+        }
+        
+        .page1 {
+          width: 60px; height: 80px;
+          top: 15%; left: 10%;
+          transform: rotate(8deg) translateZ(0);
+          animation: float1 18s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+        }
+        
+        .page2 {
+          width: 70px; height: 90px;
+          top: 50%; left: 75%;
+          transform: rotate(-12deg) translateZ(0);
+          animation: float2 22s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+        }
+        
+        .page3 {
+          width: 50px; height: 70px;
+          top: 80%; left: 40%;
+          transform: rotate(5deg) translateZ(0);
+          animation: float3 20s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+        }
+        
+        @keyframes float1 {
+          0% { transform: translateY(0) rotate(8deg) translateZ(0); }
+          20% { transform: translateY(-10px) rotate(9deg) translateZ(0); }
+          40% { transform: translateY(-20px) rotate(10deg) translateZ(0); }
+          60% { transform: translateY(-25px) rotate(12deg) translateZ(0); }
+          80% { transform: translateY(-15px) rotate(10deg) translateZ(0); }
+          100% { transform: translateY(0) rotate(8deg) translateZ(0); }
+        }
+        
+        @keyframes float2 {
+          0% { transform: translateY(0) rotate(-12deg) translateZ(0); }
+          25% { transform: translateY(-15px) rotate(-10deg) translateZ(0); }
+          50% { transform: translateY(-30px) rotate(-8deg) translateZ(0); }
+          75% { transform: translateY(-15px) rotate(-10deg) translateZ(0); }
+          100% { transform: translateY(0) rotate(-12deg) translateZ(0); }
+        }
+        
+        @keyframes float3 {
+          0% { transform: translateY(0) rotate(5deg) translateZ(0); }
+          33% { transform: translateY(-10px) rotate(7deg) translateZ(0); }
+          66% { transform: translateY(-20px) rotate(9deg) translateZ(0); }
+          100% { transform: translateY(0) rotate(5deg) translateZ(0); }
+        }
+        
+        /* ---------- ULTRA-SMOOTH BLOOD DRIP EFFECT ---------- */
+        .blood-container {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          z-index: 10;
+          overflow: hidden;
+        }
+        
+        .drip {
+          position: absolute;
+          top: -20px;
+          width: 14px;
+          height: 24px;
+          background: rgba(150, 0, 20, 0.8);
+          border-radius: 0 0 50% 50%;
+          box-shadow: 0 0 12px rgba(150, 0, 20, 0.5);
+          animation: bloodDrop 10s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+          opacity: 0;
+          transform-origin: top center;
+          filter: blur(0.6px);
+          will-change: transform, opacity;
+        }
+        
+        .drip::after {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border-radius: 0 0 50% 50%;
+          box-shadow: inset 0 -3px 5px rgba(0,0,0,0.6);
+          background: linear-gradient(to bottom, 
+                      rgba(200, 0, 30, 0.8) 0%, 
+                      rgba(120, 0, 20, 0.9) 100%);
+        }
+        
+        @keyframes bloodDrop {
+          0% {
+            top: -30px;
+            opacity: 0;
+            transform: scaleY(1) translateZ(0);
+          }
+          5% {
+            opacity: 1;
+          }
+          15% {
+            transform: scaleY(1.5) translateZ(0);
+          }
+          30% {
+            transform: scaleY(1.2) translateZ(0);
+          }
+          45% {
+            top: 30%;
+            opacity: 1;
+            transform: scaleY(1.3) translateZ(0);
+          }
+          70% {
+            top: 75%;
+            opacity: 0.9;
+            transform: scaleY(1.1) translateZ(0);
+          }
+          90% {
+            top: 90%;
+            opacity: 0.8; 
+            transform: scaleY(0.9) translateZ(0);
+          }
+          98% {
+            opacity: 0.4;
+          }
+          100% {
+            opacity: 0;
+            top: 100%;
+            transform: scaleY(0.5) translateZ(0);
+          }
+        }
+        
+        /* ---------- MULTIPLE BLOOD DROPS WITH VARIED TIMING ---------- */
+        .drip:nth-child(1) {
+          left: 10%;
+          animation-duration: 9s;
+          animation-delay: 0s;
+          width: 16px;
+          height: 28px;
+        }
+        
+        .drip:nth-child(2) {
+          left: 25%;
+          animation-duration: 11s;
+          animation-delay: 2s;
+          width: 12px;
+          height: 22px;
+        }
+        
+        .drip:nth-child(3) {
+          left: 42%;
+          animation-duration: 10s;
+          animation-delay: 3.5s;
+          width: 14px;
+          height: 24px;
+        }
+        
+        .drip:nth-child(4) {
+          left: 65%;
+          animation-duration: 12s;
+          animation-delay: 1.5s;
+          width: 15px;
+          height: 26px;
+        }
+        
+        .drip:nth-child(5) {
+          left: 85%;
+          animation-duration: 9.5s;
+          animation-delay: 4s;
+          width: 13px;
+          height: 23px;
+        }
+        
+        /* Additional drips for more blood */
+        .drip:nth-child(6) {
+          left: 18%;
+          animation-duration: 10.5s;
+          animation-delay: 5.2s;
+          width: 14px;
+          height: 25px;
+        }
+        
+        .drip:nth-child(7) {
+          left: 52%;
+          animation-duration: 9.8s;
+          animation-delay: 6.5s;
+          width: 15px;
+          height: 27px;
+        }
+        
+        .drip:nth-child(8) {
+          left: 78%;
+          animation-duration: 11.2s;
+          animation-delay: 2.8s;
+          width: 13px;
+          height: 24px;
+        }
+        
+        /* ---------- IMPROVED SPLATTERING EFFECTS (Small drops) ---------- */
+        .drip-small {
+          position: absolute;
+          background: rgba(180, 0, 20, 0.9);
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          opacity: 0;
+          pointer-events: none;
+          box-shadow: 0 0 5px rgba(180, 0, 20, 0.5);
+          animation: smallDrop 3.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+          will-change: transform, opacity;
+          z-index: 11;
+        }
+        
+        .drip-small:nth-child(odd) {
+          width: 4px;
+          height: 4px;
+        }
+        
+        .drip-small:nth-child(even) {
+          width: 6px;
+          height: 6px;
+        }
+        
+        @keyframes smallDrop {
+          0% {
+            opacity: 0;
+          }
+          10% {
+            opacity: 0.9;
+            transform: translate(0, 0) scale(1) translateZ(0);
+          }
+          30% {
+            opacity: 0.8;
+            transform: translate(calc(var(--random-x, 10px) * 0.3), calc(var(--random-y, 20px) * 0.3)) scale(0.9) translateZ(0);
+          }
+          60% {
+            opacity: 0.6;
+            transform: translate(calc(var(--random-x, 10px) * 0.6), calc(var(--random-y, 20px) * 0.6)) scale(0.7) translateZ(0);
+          }
+          100% {
+            opacity: 0;
+            transform: translate(var(--random-x, 20px), var(--random-y, 40px)) scale(0.2) translateZ(0);
+          }
+        }
+        
+        /* ---------- THE SURFACE IMPACT WITH REALISTIC SPLASH ---------- */
+        .drip-splatter {
+          position: absolute;
+          bottom: 10%;
+          width: 0;
+          height: 0;
+          background: rgba(180, 0, 20, 0.7);
+          border-radius: 50%;
+          transform: translateZ(0);
+          filter: blur(0.5px);
+          box-shadow: 0 0 8px rgba(180, 0, 20, 0.4);
+          animation: splatterEffect 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+          will-change: transform, opacity;
+          z-index: 9;
+        }
+        
+        @keyframes splatterEffect {
+          0% {
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
+          5% {
+            opacity: 1;
+            width: 10px;
+            height: 10px;
+          }
+          20% {
+            width: 25px;
+            height: 20px;
+            opacity: 0.9;
+            transform: scaleY(0.7) translateZ(0);
+          }
+          40% {
+            width: 40px;
+            height: 25px; /* Elliptical shape */
+            opacity: 0.8;
+            transform: scaleY(0.5) translateZ(0); /* Flatten for 3D effect */
+          }
+          70% {
+            width: 45px;
+            height: 23px;
+            opacity: 0.5;
+            transform: scaleY(0.4) translateZ(0);
+          }
+          100% {
+            width: 50px;
+            height: 20px;
+            opacity: 0;
+            transform: scaleY(0.3) translateZ(0);
+          }
+        }
+        
+        /* More splatter effects at different positions */
+        .drip-splatter:nth-child(2) {
+          left: 30%;
+          animation-delay: 2s;
+        }
+        
+        .drip-splatter:nth-child(3) {
+          left: 70%;
+          animation-delay: 4s;
+        }
+        
+        /* ---------- CONTAINER & CONTENT WITH IMPROVED STYLING ---------- */
+        .container {
+          position: relative;
+          max-width: 650px;
+          margin: 60px auto;
+          background: rgba(30, 30, 30, 0.6);
+          border-radius: 10px;
+          padding: 35px;
+          box-shadow: 
+            0 10px 30px rgba(0, 0, 0, 0.5),
+            0 0 30px rgba(150, 0, 15, 0.2),
+            inset 0 0 15px rgba(0, 0, 0, 0.4);
+          border: 1px solid rgba(55, 55, 55, 0.6);
+          backdrop-filter: blur(5px);
+          animation: containerPulse 8s ease-in-out infinite alternate;
+          z-index: 5;
+          transform: translateZ(0);
+        }
+        
+        @keyframes containerPulse {
+          0% { 
+            box-shadow: 
+              0 10px 30px rgba(0, 0, 0, 0.5),
+              0 0 20px rgba(150, 0, 15, 0.1),
+              inset 0 0 15px rgba(0, 0, 0, 0.4);
+          }
+          33% {
+            box-shadow: 
+              0 10px 30px rgba(0, 0, 0, 0.5),
+              0 0 25px rgba(150, 0, 15, 0.15),
+              inset 0 0 15px rgba(0, 0, 0, 0.4);
+          }
+          66% {
+            box-shadow: 
+              0 10px 30px rgba(0, 0, 0, 0.5),
+              0 0 35px rgba(150, 0, 15, 0.25),
+              inset 0 0 15px rgba(0, 0, 0, 0.4);
+          }
+          100% { 
+            box-shadow: 
+              0 10px 30px rgba(0, 0, 0, 0.5),
+              0 0 40px rgba(150, 0, 15, 0.3),
+              inset 0 0 15px rgba(0, 0, 0, 0.4);
+          }
+        }
+        
+        /* Blood stains on container */
+        .container::before {
+          content: '';
+          position: absolute;
+          top: -10px;
+          right: 30px;
+          width: 40px;
+          height: 60px;
+          background: rgba(150, 0, 20, 0.3);
+          border-radius: 50% 50% 45% 55%;
+          transform: rotate(25deg);
+          filter: blur(10px);
+          opacity: 0.6;
+          z-index: -1;
+        }
+        
+        .container::after {
+          content: '';
+          position: absolute;
+          bottom: -15px;
+          left: 50px;
+          width: 55px;
+          height: 30px;
+          background: rgba(150, 0, 20, 0.25);
+          border-radius: 50%;
+          transform: rotate(-15deg);
+          filter: blur(8px);
+          opacity: 0.5;
+          z-index: -1;
+        }
+        
+        h1 {
+          text-align: center;
+          font-size: 2.5rem;
+          font-weight: 800;
+          letter-spacing: 1px;
+          margin-bottom: 30px;
+          color: #f0f0f0;
+          text-shadow: 
+            0 0 15px rgba(150, 0, 20, 0.5),
+            0 2px 5px rgba(0, 0, 0, 0.7);
+          animation: titleFlicker 6s ease-in-out infinite alternate;
+          transform: translateZ(0);
+        }
+        
+        @keyframes titleFlicker {
+          0% { 
+            opacity: 1;
+            text-shadow: 
+              0 0 10px rgba(150, 0, 20, 0.3),
+              0 2px 5px rgba(0, 0, 0, 0.7);
+          }
+          20% {
+            opacity: 0.98;
+            text-shadow: 
+              0 0 12px rgba(150, 0, 20, 0.4),
+              0 2px 5px rgba(0, 0, 0, 0.7);
+          }
+          40% {
+            opacity: 0.95;
+            text-shadow: 
+              0 0 15px rgba(150, 0, 20, 0.5),
+              0 2px 5px rgba(0, 0, 0, 0.7);
+          }
+          60% { 
+            opacity: 0.9;
+            text-shadow: 
+              0 0 20px rgba(150, 0, 20, 0.6),
+              0 2px 5px rgba(0, 0, 0, 0.7);
+          }
+          80% {
+            opacity: 0.93;
+            text-shadow: 
+              0 0 15px rgba(150, 0, 20, 0.5),
+              0 2px 5px rgba(0, 0, 0, 0.7);
+          }
+          100% { 
+            opacity: 1;
+            text-shadow: 
+              0 0 10px rgba(150, 0, 20, 0.3),
+              0 2px 5px rgba(0, 0, 0, 0.7);
+          }
+        }
+        
+        input, textarea {
+          width: 100%;
+          padding: 14px;
+          margin: 12px 0;
+          background-color: rgba(25, 25, 25, 0.7);
+          color: #f0f0f0;
+          border: 1px solid #444;
+          border-radius: 8px;
+          box-shadow: 
+            inset 0 0 10px rgba(0, 0, 0, 0.4),
+            0 0 5px rgba(150, 0, 15, 0.1);
+          transition: 
+            all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1),
+            box-shadow 0.5s ease-out;
+          font-family: 'Segoe UI', sans-serif;
+          font-size: 16px;
+        }
+        
+        input:focus, textarea:focus {
+          border-color: rgba(150, 0, 20, 0.8);
+          transform: scale(1.01);
+          outline: none;
+          box-shadow: 
+            inset 0 0 10px rgba(0, 0, 0, 0.4),
+            0 0 15px rgba(150, 0, 15, 0.3);
+        }
+        
+        input::placeholder, textarea::placeholder {
+          color: rgba(170, 170, 170, 0.5);
+          transition: color 0.3s ease;
+        }
+        
+        input:focus::placeholder, textarea:focus::placeholder {
+          color: rgba(170, 170, 170, 0.3);
+        }
+        
+        button {
+          padding: 14px 24px;
+          background: linear-gradient(135deg, #5a0f1a, #801323);
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: bold;
+          letter-spacing: 0.5px;
+          font-size: 16px;
+          box-shadow: 
+            0 4px 15px rgba(0, 0, 0, 0.3),
+            0 0 10px rgba(150, 0, 15, 0.2),
+            inset 0 1px 2px rgba(255, 255, 255, 0.1);
+          transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+          position: relative;
+          overflow: hidden;
+        }
+        
+        button:hover {
+          background: linear-gradient(135deg, #741221, #a01829);
+          transform: translateY(-2px) scale(1.03);
+          box-shadow: 
+            0 6px 20px rgba(0, 0, 0, 0.4),
+            0 0 15px rgba(150, 0, 15, 0.4),
+            inset 0 1px 2px rgba(255, 255, 255, 0.2);
+        }
+        
+        button:active {
+          transform: translateY(1px) scale(0.98);
+          box-shadow: 
+            0 2px 8px rgba(0, 0, 0, 0.5),
+            0 0 5px rgba(150, 0, 15, 0.2),
+            inset 0 1px 1px rgba(255, 255, 255, 0.1);
+          transition: all 0.1s cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+        
+        /* Button blood effect */
+        button::after {
+          content: '';
+          position: absolute;
+          top: -10px;
+          left: -10px;
+          right: -10px;
+          bottom: -10px;
+          background: radial-gradient(circle at 50% 50%, rgba(150, 0, 20, 0.4) 0%, transparent 70%);
+          opacity: 0;
+          transition: opacity 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+          z-index: -1;
+          pointer-events: none;
+        }
+        
+        button:hover::after {
+          opacity: 1;
+        }
+        
+        pre {
+          background: rgba(20, 20, 20, 0.7);
+          padding: 16px;
+          border: 1px solid #333;
+          border-radius: 8px;
+          overflow-x: auto;
+          color: #e0e0e0;
+          box-shadow: 
+            inset 0 0 10px rgba(0, 0, 0, 0.5),
+            0 0 5px rgba(150, 0, 15, 0.1);
+          margin: 20px 0;
+          font-family: 'Consolas', monospace;
+          font-size: 14px;
+          line-height: 1.5;
+        }
+        
+        /* ---------- ENHANCED TALLER BLOOD POOL AT PAGE BOTTOM ---------- */
+        .blood-pool {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 80px; /* Increased height */
+          background: linear-gradient(to bottom, 
+            transparent, 
+            rgba(100, 0, 15, 0.1) 20%, 
+            rgba(130, 0, 20, 0.25) 70%, 
+            rgba(150, 0, 20, 0.4));
+          z-index: 5;
+          overflow: hidden;
+        }
+        
+        .blood-ripple {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: radial-gradient(
+            circle at 50% 100%,
+            rgba(180, 0, 20, 0.4) 0%,
+            transparent 60%
+          );
+          opacity: 0;
+          animation: ripple 8s infinite;
+          transform-origin: center bottom;
+        }
+        
+        .blood-ripple:nth-child(2) {
+          animation-delay: 2s;
+          left: 30%;
+        }
+        
+        .blood-ripple:nth-child(3) {
+          animation-delay: 4s;
+          left: 70%;
+        }
+        
+        @keyframes ripple {
+          0% {
+            transform: scale(0.1);
+            opacity: 0.8;
+          }
+          100% {
+            transform: scale(3);
+            opacity: 0;
+          }
+        }
+        
+        .blood-wave {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 200%;
+          height: 30px; /* Taller waves */
+          background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60'%3E%3Cpath fill='rgba(150, 0, 20, 0.4)' d='M0,30 C100,10 200,40 300,20 C400,0 500,25 600,15 C700,5 800,25 900,20 C1000,15 1100,5 1200,25 L1200,60 L0,60 Z'%3E%3C/path%3E%3C/svg%3E");
+          background-repeat: repeat-x;
+          animation: bloodWave 20s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+        }
+        
+        .blood-wave:nth-child(2) {
+          bottom: 10px;
+          opacity: 0.7;
+          height: 20px;
+          animation-duration: 15s;
+          animation-direction: reverse;
+          background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40'%3E%3Cpath fill='rgba(120, 0, 15, 0.3)' d='M0,20 C150,30 300,10 450,25 C600,40 750,15 900,25 C1050,35 1150,15 1200,20 L1200,40 L0,40 Z'%3E%3C/path%3E%3C/svg%3E");
+        }
+        
+        @keyframes bloodWave {
+          0% { transform: translateX(0); }
+          50% { transform: translateX(-25%); }
+          100% { transform: translateX(-50%); }
+        }
+        
+        /* Blood bubbles rising effect */
+        .bubble {
+          position: absolute;
+          bottom: -10px;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: rgba(150, 0, 20, 0.6);
+          opacity: 0;
+          animation: bubble 12s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
+        }
+        
+        .bubble:nth-child(2n) {
+          width: 4px;
+          height: 4px;
+          animation-duration: 9s;
+        }
+        
+        .bubble:nth-child(3n) {
+          width: 8px;
+          height: 8px;
+          animation-duration: 15s;
+        }
+        
+        @keyframes bubble {
+          0% {
+            opacity: 0;
+            transform: translateY(0) translateX(0);
+          }
+          10% {
+            opacity: 0.7;
+          }
+          100% {
+            opacity: 0;
+            transform: translateY(-70px) translateX(var(--bubble-x, 20px));
+          }
+        }
+        
+        /* Position the bubbles */
+        .bubble:nth-child(1) { left: 15%; --bubble-x: 10px; }
+        .bubble:nth-child(2) { left: 25%; --bubble-x: -15px; animation-delay: 2s; }
+        .bubble:nth-child(3) { left: 40%; --bubble-x: 5px; animation-delay: 4s; }
+        .bubble:nth-child(4) { left: 65%; --bubble-x: -10px; animation-delay: 1s; }
+        .bubble:nth-child(5) { left: 80%; --bubble-x: 15px; animation-delay: 3s; }
+        .bubble:nth-child(6) { left: 90%; --bubble-x: -5px; animation-delay: 5s; }
+        
+        /* ---------- FROST EFFECT ---------- */
+        .frost {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: 
+            linear-gradient(to bottom, 
+              rgba(255, 255, 255, 0.03) 1px, 
+              transparent 1px),
+            linear-gradient(to right, 
+              rgba(255, 255, 255, 0.03) 1px, 
+              transparent 1px);
+          background-size: 30px 30px;
+          pointer-events: none;
+          z-index: 1;
+          opacity: 0.3;
+        }
+        
+        /* Apply frost to edges */
+        .frost::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100px;
+          background: linear-gradient(to bottom, 
+            rgba(200, 230, 255, 0.05) 0%, 
+            transparent 100%);
+          opacity: 0.5;
+        }
+        
+        .frost::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 50px;
+          background: linear-gradient(to top, 
+            rgba(200, 230, 255, 0.05) 0%, 
+            transparent 100%);
+          opacity: 0.3;
+        }
+        
+        /* Add ice crystals */
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            color: #f0f0f0;
+            text-shadow: 0 0 5px rgba(255,255,255,0.1), 0 0 10px rgba(150,0,30,0.3);
+          }
+          
+          /* ---------- OPTIONAL ICE CRYSTAL EFFECTS (Subtle shimmer or frost overlay) ---------- */
+          .ice-crystal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            z-index: 12;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 800 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cfilter id='frost'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.03' numOctaves='2' result='turb'%3E%3C/feTurbulence%3E%3CfeDisplacementMap in2='turb' in='SourceGraphic' scale='10' xChannelSelector='R' yChannelSelector='G'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='800' height='600' fill='white' filter='url(%23frost)' opacity='0.03' /%3E%3C/svg%3E");
+            animation: frostShimmer 20s ease-in-out infinite alternate;
+            mix-blend-mode: screen;
+          }
+          
+          @keyframes frostShimmer {
+            0% {
+              opacity: 0.02;
+              transform: scale(1);
+            }
+            50% {
+              opacity: 0.06;
+              transform: scale(1.01);
+            }
+            100% {
+              opacity: 0.03;
+              transform: scale(1);
+            }
+          }
+</style>          
+    <script>
+        // Base URL for the backend API
+        const BASE_URL = "https://novel-nest-s2of.onrender.com";
+
+        // Function to recommend books by genre
+        async function recommendByGenre() {
+            const genre = document.getElementById("genre").value;
+            if (!genre) {
+                alert("Please enter a genre.");
+                return;
+            }
+            try {
+                const response = await fetch(`${BASE_URL}/recommend/genre?genre=${genre}&n=5`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                console.error("Error fetching genre recommendations:", error);
+                alert("An error occurred. Please check the backend or try again.");
+            }
+        }
+
+        // Function to recommend books by sentiment
+        async function recommendBySentiment() {
+            const text = document.getElementById("sentimentText").value;
+            if (!text) {
+                alert("Please enter your thoughts or feelings.");
+                return;
+            }
+            try {
+                const response = await fetch(`${BASE_URL}/recommend/sentiment`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ text: text, n: 5 }),
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                console.error("Error fetching sentiment recommendations:", error);
+                alert("An error occurred. Please check the backend or try again.");
+            }
+        }
+
+        // Function to display results in the results section
+        function displayResults(data) {
+            const resultsElement = document.getElementById("results");
+            if (data.message) {
+                resultsElement.innerHTML = `<p>${data.message}</p>`;
+            } else if (data.books) {
+                let resultHTML = "<h3>Recommended Books:</h3><ul>";
+                data.books.forEach(book => {
+                    resultHTML += `<li><strong>${book.title}</strong> by ${book.author} (Genre: ${book.genre})</li>`;
+                });
+                resultHTML += "</ul>";
+                resultsElement.innerHTML = resultHTML;
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div class="frost"></div>
+<div class="blood-container">
+  <div class="drip"></div>
+  <div class="drip"></div>
+  <div class="drip"></div>
+  <div class="drip"></div>
+  <div class="drip"></div>
+  <div class="drip-small"></div>
+  <div class="drip-small"></div>
+  <div class="drip-small"></div>
+  <div class="drip-splatter"></div>
+</div>
+<div class="blood-pool">
+  <div class="blood-wave"></div>
+</div>
+      <!-- Multiple blood drops -->
+  <div class="drip"></div>
+  <div class="drip"></div>
+  <div class="drip"></div>
+  <div class="drip"></div>
+
+  <!-- Smaller droplets/splatter effects -->
+  <div class="drip-small"></div>
+  <div class="drip-small"></div>
+
+  <!-- Splatter effect when the blood hits the surface -->
+  <div class="drip-splatter"></div>
+
+      <!-- Floating “pages” -->
+  <div class="page page1"></div>
+  <div class="page page2"></div>
+  <div class="page page3"></div>
+
+  <!-- Occasional blood drip -->
+  <div class="drip"></div>
+
+    <div class="container">
+        <h1>Book Recommender</h1>
+
+        <!-- Genre Recommendation Section -->
+        <div>
+            <h2>Recommend by Genre</h2>
+            <input type="text" id="genre" placeholder="Enter genre (e.g., Fiction, Romance)">
+            <button onclick="recommendByGenre()">Recommend</button>
+        </div>
+
+        <!-- Sentiment Recommendation Section -->
+        <div>
+            <h2>Recommend by Sentiment</h2>
+            <textarea id="sentimentText" rows="4" placeholder="Describe your mood or feelings..."></textarea>
+            <button onclick="recommendBySentiment()">Recommend</button>
+        </div>
+
+        <!-- Results Section -->
+        <div>
+            <h2>Results</h2>
+            <div id="results">
+                <p>No recommendations yet. Use the options above to find books!</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

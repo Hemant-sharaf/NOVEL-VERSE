@@ -1,0 +1,279 @@
+/* Stranger Things-Inspired Retro Novel Generator Styles */
+@import url('https://fonts.googleapis.com/css2?family=Benguiat+ITC:wght@400;700&display=swap');
+
+:root {
+  --st-red: #e6252c;
+  --st-dark: #000000;
+  --st-light: #ffe4a9;
+  --st-blue: #2c3975;
+}
+
+body {
+  background-color: var(--st-dark);
+  background-image: url('https://cdnjs.cloudflare.com/ajax/libs/magic-ui/1.0.0/img/noise-texture.png');
+  background-blend-mode: multiply;
+  font-family: 'Benguiat ITC', serif;
+  color: var(--st-light);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Red laser line effects */
+body::before, body::after {
+  content: "";
+  position: fixed;
+  height: 2px;
+  width: 100%;
+  background: var(--st-red);
+  opacity: 0.7;
+  left: 0;
+  pointer-events: none;
+  animation: scanline 8s linear infinite;
+  box-shadow: 0 0 12px 1px var(--st-red);
+}
+
+body::before {
+  top: 15%;
+}
+
+body::after {
+  top: 65%;
+  animation-delay: 4s;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-10vh);
+  }
+  100% {
+    transform: translateY(110vh);
+  }
+}
+
+/* CRT screen effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.4;
+}
+
+h1 {
+  font-size: 4rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  color: var(--st-red);
+  text-shadow: 
+    0 0 20px var(--st-red),
+    0 0 30px var(--st-red),
+    0 0 40px var(--st-red),
+    2px 2px 0px var(--st-dark);
+  position: relative;
+  transform: scale(1, 1.2);
+  animation: flicker 4s infinite alternate;
+}
+
+@keyframes flicker {
+  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+    opacity: 1;
+    text-shadow: 
+      0 0 20px var(--st-red),
+      0 0 30px var(--st-red),
+      0 0 40px var(--st-red),
+      2px 2px 0px var(--st-dark);
+  }
+  20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+    opacity: 0.6;
+    text-shadow: none;
+  }
+}
+
+form {
+  background: var(--st-blue);
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.4) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.4) 1px, transparent 1px);
+  background-size: 20px 20px;
+  padding: 40px;
+  border-radius: 0;
+  box-shadow: 
+    0px 0px 20px rgba(230, 37, 44, 0.6),
+    0px 0px 60px rgba(0, 0, 0, 0.8),
+    inset 0 0 40px rgba(0, 0, 0, 0.6);
+  width: 80%;
+  max-width: 800px;
+  border: 4px solid var(--st-light);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+form::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(
+      circle at center,
+      transparent 50%,
+      rgba(0, 0, 0, 0.6) 100%
+    );
+  pointer-events: none;
+}
+
+label {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--st-light);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0 var(--st-dark);
+}
+
+textarea, select, input {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid var(--st-light);
+  border-radius: 0;
+  font-size: 1.1rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--st-light);
+  transition: all 0.3s;
+  font-family: 'Courier New', monospace;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+textarea:focus, select:focus, input:focus {
+  background: rgba(44, 57, 117, 0.8);
+  outline: none;
+  border-color: var(--st-red);
+  box-shadow: 
+    0 0 15px var(--st-red),
+    inset 0 0 10px var(--st-red);
+}
+
+textarea::placeholder, select, input::placeholder {
+  color: rgba(255, 228, 169, 0.6);
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23ffe4a9' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+}
+
+button {
+  margin-top: 30px;
+  padding: 18px 30px;
+  background: var(--st-red);
+  color: var(--st-dark);
+  font-weight: bold;
+  border: 2px solid var(--st-light);
+  border-radius: 0;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(230, 37, 44, 0.8);
+  align-self: center;
+  min-width: 220px;
+}
+
+button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+button:hover {
+  background: #ff3c41;
+  transform: scale(1.05);
+  box-shadow: 
+    0 0 30px var(--st-red),
+    0 0 60px var(--st-red);
+  color: var(--st-light);
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+/* VHS tracking effect */
+@keyframes vhsTracking {
+  0% {
+    transform: translateY(-1px);
+    opacity: 0.9;
+  }
+  10% {
+    transform: translateY(1px);
+    opacity: 0.8;
+  }
+  20% {
+    transform: translateY(-1px);
+    opacity: 0.9;
+  }
+  30% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+form {
+  animation: vhsTracking 6s ease-in-out infinite;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 900px) {
+  form {
+    width: 95%;
+    padding: 30px;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+  }
+}

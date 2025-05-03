@@ -1,0 +1,193 @@
+/* General Styling */
+body {
+    background: linear-gradient(145deg, #0d0d0d, #1c1c1c); /* Dark gradient for depth */
+    background-color: #0d0d0d; /* Fallback solid dark color */
+    color: #ffffff; /* Default text color for readability */
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.nevbar {
+    background: #111;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+}
+.nev {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.nev a {
+    color: #ff3333;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 1.2rem;
+    transition: 0.3s;
+}
+
+.nev a:hover {
+    color: #ff0000;
+    text-shadow: 0 0 10px #ff0000;
+}
+
+.carousel {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.carousel-inner img {
+    height: 650px; /* Decreased height */
+    object-fit: cover;
+    width: 100%; /* Ensures the image spans the full width */
+}
+
+
+.logo {
+    font-family: Arial, sans-serif;
+    font-size: 2rem; /* Adjust size as needed */
+    color: whitesmoke;
+    text-shadow: 0 0 5px red, 0 0 10px red, 0 0 20px red, 0 0 30px red, 0 0 40px red, 0 0 50px red, 0 0 60px red;
+    background-color: black; /* Set the background color */
+    padding: 10px; /* Optional padding */
+    display: inline-block; /* Keeps it inline */
+}
+
+.book-cards .card {
+    background: linear-gradient(145deg, #1a1a1a, #2b2b2b); /* Dark gradient background for a cold theme */
+    border: 1px solid #ff0000; /* Killer bloody red border */
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), 0 0 30px rgba(50, 0, 0, 0.5); /* Intense bloody red glow */
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.book-cards .card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 1), 0 0 40px rgba(50, 0, 0, 0.7); /* Amplified red glow on hover */
+}
+
+.book-cards .card-title {
+    color: #ff0000; /* Vivid red for a killer vibe */
+    font-family: 'Courier New', Courier, monospace; /* Adds a gritty look */
+    margin: 15px 0 10px;
+    font-size: 1.3rem;
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.8), 0 0 10px rgba(255, 0, 0, 0.6); /* Adds a glowing effect to the title */
+    text-align: center;
+}
+
+.book-cards .card-genre {
+    font-size: 1rem;
+    color: #dddddd; /* Slightly brighter grey for readability */
+    font-style: italic;
+    text-align: center;
+    text-shadow: 0 0 3px rgba(255, 0, 0, 0.4); /* Subtle red glow to align with the theme */
+    margin-bottom: 10px;
+    
+}
+
+.book-cards .card img {
+    border-bottom: 2px solid #ff0000; /* Bloody red underline below the image */
+    border-radius: 12px 12px 0 0;
+    object-fit: cover;
+    height: 180px; /* Adjusted image height */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.book-cards .card img:hover {
+    opacity: 0.9; /* Subtle dimming effect on hover */
+}
+
+.book-cards .card-body {
+    padding: 15px;
+    background: #1a1a1a; /* Cold dark background for card body */
+
+    border-top: 1px solid #333; /* Adds separation for the card content */
+}
+.alert {
+    margin-top: 80px;
+}
+.heading {
+    margin-inline-start: 100px;
+}
+
+
+
+.footer {
+    background-color: #1b1b1b;
+    color: #ddd;
+    padding: 2rem 1rem;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 2rem;
+  }
+  
+  .footer-section {
+    flex: 1;
+    min-width: 250px;
+  }
+  
+  .footer-title {
+    color: #ff3333;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  
+  .footer-links {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-links li {
+    margin: 0.5rem 0;
+  }
+  
+  .footer-links a {
+    color: #ddd;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .footer-links a:hover {
+    color: #ff3333;
+  }
+  
+  .footer-social {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .social-icon {
+    font-size: 1.2rem;
+    color: #ddd;
+    transition: color 0.3s, transform 0.3s;
+  }
+  
+  .social-icon:hover {
+    color: #ff3333;
+    transform: scale(1.2);
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    border-top: 1px solid #444;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    font-size: 0.9rem;
+  }
+  
