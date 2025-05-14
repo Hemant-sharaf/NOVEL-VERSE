@@ -1,4 +1,4 @@
-window.GEMINI_API_KEY = "AIzaSyDaOoN3iqZm1tRZZ6Lmv55cxkJpLMaOqFc";
+window.GEMINI_API_KEY = "AIzaSyDfGoKJtpW7kwohmpJnHZj2l-XDN4eNh4Q";
 import { generateNovel } from "./geminiAPI.js";
 
 
