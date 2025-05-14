@@ -2,15 +2,14 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebas
 import { getAuth, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB7OA2e7AlGD1WgVlSFmNeQiHnzujaEnow",
-  authDomain: "novel-nest-67597.firebaseapp.com",
-  projectId: "novel-nest-67597",
-  storageBucket: "novel-nest-67597.firebasestorage.app",
-  messagingSenderId: "12050748698",
-  appId: "1:12050748698:web:412dc3ea0861a17392c8a3",
-  measurementId: "G-98BHKM6X9G"
+  apiKey: "AIzaSyA-ikXEbtQ9e7Y2W1z37KF6UZLadcBrqIQ",
+  authDomain: "novel-nest-82cec.firebaseapp.com",
+  projectId: "novel-nest-82cec",
+  storageBucket: "novel-nest-82cec.firebasestorage.app",
+  messagingSenderId: "59970006158",
+  appId: "1:59970006158:web:777bafb0bd530e3b7d2ddf",
+  measurementId: "G-WFX2NK8K2B"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
