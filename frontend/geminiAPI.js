@@ -1,35 +1,23 @@
-// geminiapi.js
-
-// Check for API key
 const GEMINI_API_KEY = window.GEMINI_API_KEY;
 
 if (!GEMINI_API_KEY) {
     console.error("❌ Gemini API key is missing. Please set window.GEMINI_API_KEY before using the API.");
 }
 
-/**
- * Generates a novel using the Gemini API
- * @param {string} description - The core idea or prompt for the novel
- * @param {string} genre - The genre of the novel (e.g., Sci-fi, Mystery, Fantasy)
- * @param {number} numChapters - Number of chapters to include
- * @returns {Promise<Object|null>} - Novel object with title, background, genre, and chapters
- */
 export async function generateNovel(description, genre, numChapters) {
     const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${GEMINI_API_KEY}`;
 
     const requestBody = {
         contents: [
             {
-                parts: [
-                    {
-                        text: `Generate a novel in the "${genre}" genre.
-- Title: Clearly mention it at the beginning.
-- Description: Based on the following prompt: "${description}"
-- Chapters: Write ${numChapters} immersive and well-structured chapters.
-- Use rich storytelling, strong character development, and smooth flow.
-- Format: Start with "Title: <Your Title>" followed by chapters.`
-                    }
-                ]
+                parts: [{
+                    text: `Generate a novel in the "${genre}" genre.
+                    - **Title:** Clearly mention it at the beginning.
+                    - **Description:** Based on: "${description}".
+                    - **Chapters:** Write ${numChapters} well-structured chapters.
+                    - Ensure immersive storytelling, rich details, and smooth flow.
+                    - **Format:** Start with "Title: <Your Title>" followed by chapters.`
+                }]
             }
         ],
         generationConfig: {
@@ -43,14 +31,12 @@ export async function generateNovel(description, genre, numChapters) {
     try {
         const response = await fetch(apiUrl, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(requestBody)
         });
 
         const data = await response.json();
-        console.log("📦 API Response:", data);
+        console.log("📦 Full API Response:", JSON.stringify(data, null, 2));
 
         if (data.error) {
             console.error("❌ Gemini API Error:", data.error);
@@ -58,18 +44,21 @@ export async function generateNovel(description, genre, numChapters) {
             return null;
         }
 
-        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-        if (!text) {
-            console.error("❌ No text returned from Gemini.");
+        const generatedText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        console.log("📝 Generated Text:", generatedText);
+
+        if (!generatedText) {
+            console.error("❌ Empty novel content received.");
             return null;
         }
 
         // Extract title
-        const titleMatch = text.match(/(?:\*\*Title:\*\*|Title:|#\s*)\s*(.+)/i);
-        const title = titleMatch ? titleMatch[1].trim() : "Untitled Story";
+        const titleMatch = generatedText.match(/(?:\*\*Title:\*\*|Title:|#\s*)\s*(.+)/i);
+        const title = titleMatch ? titleMatch[1].trim() : generatedText.split("\n")[0].trim() || "Untitled Story";
+        console.log("🏷️ Extracted Title:", title);
 
         // Extract chapters
-        const chapters = text.match(/Chapter \d+:([\s\S]*?)(?=Chapter \d+:|$)/g) || [];
+        const chapters = generatedText.match(/Chapter \d+:([\s\S]*?)(?=Chapter \d+:|$)/g) || [];
 
         return {
             title,
@@ -78,7 +67,7 @@ export async function generateNovel(description, genre, numChapters) {
             chapters
         };
     } catch (error) {
-        console.error("❌ Network or fetch error:", error);
+        console.error("❌ Error fetching from Gemini API:", error);
         alert("Network or fetch error. See console for details.");
         return null;
     }
