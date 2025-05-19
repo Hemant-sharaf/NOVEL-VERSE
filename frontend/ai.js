@@ -11,5 +11,5 @@ document.getElementById("novelForm").addEventListener("submit", function(event) 
     }
 
     // Corrected path (without /public/)
-    window.location.href = `/novel.html?description=${description}&genre=${genre}&numChapters=${numChapters}`;
+    window.location.href = `novel.html?description=${description}&genre=${genre}&numChapters=${numChapters}`;
 });
