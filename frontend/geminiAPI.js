@@ -66,7 +66,7 @@ async function processQueue() {
 
 
 export async function generateNovel(description, genre, numChapters) {
-    const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.5-pro:generateContent?key=${GEMINI_API_KEY}`;
+   const apiUrl = `https://generativelanguage.googleapis.com/v1/models?key=${GEMINI_API_KEY}`;
 
     const requestBody = {
         contents: [
