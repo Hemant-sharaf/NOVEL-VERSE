@@ -3,7 +3,7 @@ NOVEL-NEST
 
 NOVEL-NEST is a web-based platform for novel lovers to read, explore, and generate novels tailored to their interests. It combines an intuitive interface with smart features like a genre-based recommender and an AI-powered novel generator to enhance your reading experience.
 
-🌐 Live Site:  [novelnestwebsite.netlify.app](https://news-web-r1hd.vercel.app/)
+🌐 Live Site:  [https://novelnest-platform.netlify.app/]
 
 📌 Key Features
 📚 Read a wide collection of novels across different genres.
